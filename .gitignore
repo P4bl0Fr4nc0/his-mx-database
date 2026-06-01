@@ -1,0 +1,6 @@
+.env
+__pychache__/
+*.docx
+*.xlsx
+*.csv
+venv/
