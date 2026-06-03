@@ -11,7 +11,12 @@ inicio = time.time()
 df = pd.read_excel("cat_municipios.xlsx",
                    sheet_name="Hoja1",                   
                    #Columnas que se usaran 
-                   usecols=["EFE_KEY","CATALOG_KEY","MUNICIPIO","CVEGEO"]
+                   usecols=["EFE_KEY","CATALOG_KEY","MUNICIPIO","CVEGEO"],
+                   dtype={"EFE_KEY":"string", 
+                          "CATALOG_KEY": "string", 
+                          "MUNICIPIO":"string",
+                          "CVEGEO": "string"
+                          }
 
 )
 
@@ -31,12 +36,6 @@ df = df.rename(columns={
     "MUNICIPIO": "nombre_municipio",
     "CVEGEO": "cve_geostadistica"
 })
-
-
-# pasar columna a texto 
-df["cve_estado"] = df["cve_estado"].astype("string")
-df["cve_municipio"] = df["cve_municipio"].astype("string")
-df["cve_geostadistica"] = df["cve_geostadistica"].astype("string")
 
 
 print(df.info())
