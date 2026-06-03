@@ -11,8 +11,12 @@ inicio = time.time()
 df = pd.read_excel("Cat_nacionalidades.xlsx",
                    sheet_name="Hoja1",                   
                    #Columnas que se usaran 
-                   usecols=["codigo pais","pais","clave nacionalidad"]
-
+                   usecols=["codigo pais","pais","clave nacionalidad"],
+                   dtype={"codigo pais":"string", 
+                          "pais": "string", 
+                          "clave nacionalidad":"string"
+                          }
+                
 )
 
 #Cantidad de registros extraidos
@@ -23,7 +27,6 @@ print(df.head())
 #Informacion del tipo de datos de columnas
 print(df.info())
 
-
 #Asignacion de columnas a tabla de MySQL
 df = df.rename(columns={
     "codigo pais": "cve_pais",
@@ -31,8 +34,6 @@ df = df.rename(columns={
     "clave nacionalidad": "abreviatura"
 })
 
-# pasar columna a texto 
-df["cve_pais"] = df["cve_pais"].astype("string")
 #limpiar espacion si es que los hay 
 df["cve_pais"] = df["cve_pais"].str.strip()
 df["nombre_pais"] = df["nombre_pais"].str.strip()
@@ -79,5 +80,3 @@ except Exception as e:
 
     print(f"Error en ETL: {e} se realizo rollback")
    
-
-
