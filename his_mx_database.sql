@@ -129,8 +129,12 @@ REFERENCES cat_localidad(cve_estado, cve_municipio, cve_localidad)
 );
 
 
+ALTER TABLE cat_estado ADD COLUMN codigo_estado TINYINT;
 
 Select * from cat_nacionalidad;
+SELECT * FROM cat_estado;
 
-
+DESCRIBE cat_nacionalidad;
+DESCRIBE cat_estado;
+DESCRIBE cat_;
 

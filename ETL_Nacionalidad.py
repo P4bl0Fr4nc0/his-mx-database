@@ -26,11 +26,13 @@ print(df.info())
 
 #Asignacion de columnas a tabla de MySQL
 df = df.rename(columns={
-    "clave nacionalidad": "cve_pais",
+    "codigo pais": "cve_pais",
     "pais": "nombre_pais",
-    "codigo pais": "codigo_pais"
+    "clave nacionalidad": "abreviatura"
 })
 
+# pasar columna a texto 
+df["cve_pais"] = df["cve_pais"].astype("string")
 #limpiar espacion si es que los hay 
 df["cve_pais"] = df["cve_pais"].str.strip()
 df["nombre_pais"] = df["nombre_pais"].str.strip()

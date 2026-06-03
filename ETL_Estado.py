@@ -25,17 +25,22 @@ print(df.info())
 
 #Asignacion de columnas a tabla de MySQL
 df = df.rename(columns={
-    "ABREVIATURA": "cve_estado",
+    "CATALOG_KEY": "cve_estado",
     "ENTIDAD_FEDERATIVA": "nombre_estado",
-    "CATALOG_KEY": "codigo_estado"
+    "ABREVIATURA": "abreviatura"
 })
+
+
+# pasar columna a texto 
+df["cve_estado"] = df["cve_estado"].astype("string")
 
 #corregir error del codigo con clave 88 que detecta como vacio cuando es NA No aplica
 df.loc[
-    df["codigo_estado"] == 88,
+    df["cve_estado"] == 88,
     "cve_estado"
 ] = "NA"
 
+print(df.info())
 print("-------Comienza la Carga-------")
 
 load_dotenv()
