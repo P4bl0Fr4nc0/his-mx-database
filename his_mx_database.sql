@@ -129,12 +129,32 @@ REFERENCES cat_localidad(cve_estado, cve_municipio, cve_localidad)
 );
 
 
-ALTER TABLE cat_estado ADD COLUMN codigo_estado TINYINT;
+ALTER TABLE cat_estado CHANGE COLUMN codigo_estado abreviatura CHAR(3);
+ALTER TABLE cat_nacionalidad CHANGE COLUMN codigo_pais abreviatura CHAR(4);
+
+ALTER TABLE cat_municipio ADD COLUMN cve_geostadistica CHAR(5) NOT NULL UNIQUE;
+ALTER TABLE cat_localidad ADD COLUMN cve_geostadistica CHAR(9) NOT NULL UNIQUE;
+
 
 Select * from cat_nacionalidad;
 SELECT * FROM cat_estado;
+SELECT * FROM cat_municipio;
+SELECT * FROM cat_localidad;
+
+/*  ELIMINACION DE REGISTROS POR CORRECCION DE DATOS 
+SET FOREIGN_KEY_CHECKS = 0;
+Truncate TABLE cat_nacionalidad;
+Truncate TABLe pacientes;
+Truncate TABLE cat_estado;
+truncate TABLE cat_municipio;
+Truncate TABLE cat_localidad;
+SET FOREIGN_KEY_CHECKS = 1;
+*/
 
 DESCRIBE cat_nacionalidad;
 DESCRIBE cat_estado;
-DESCRIBE cat_;
+DESCRIBE cat_municipio;
+DESCRIBE cat_localidad;
+
+
 
