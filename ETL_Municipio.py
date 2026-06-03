@@ -2,16 +2,16 @@ import pandas as pd
 from sqlalchemy import create_engine
 import time
 
-import os 
+import os
 from dotenv import load_dotenv
 
 
 inicio = time.time()
 #Importar archivo excel
-df = pd.read_excel("cat_estado.xlsx",
-                   sheet_name="ENTIDAD_FEDERATIVA",                   
+df = pd.read_excel("cat_municipios.xlsx",
+                   sheet_name="Hoja1",                   
                    #Columnas que se usaran 
-                   usecols=["CATALOG_KEY","ENTIDAD_FEDERATIVA","ABREVIATURA"]
+                   usecols=["EFE_KEY","CATALOG_KEY","MUNICIPIO","CVEGEO"]
 
 )
 
@@ -23,25 +23,25 @@ print(df.head())
 #Informacion del tipo de datos de columnas
 print(df.info())
 
+
 #Asignacion de columnas a tabla de MySQL
 df = df.rename(columns={
-    "CATALOG_KEY": "cve_estado",
-    "ENTIDAD_FEDERATIVA": "nombre_estado",
-    "ABREVIATURA": "abreviatura"
+    "EFE_KEY": "cve_estado",
+    "CATALOG_KEY": "cve_municipio",
+    "MUNICIPIO": "nombre_municipio",
+    "CVEGEO": "cve_geostadistica"
 })
 
 
 # pasar columna a texto 
 df["cve_estado"] = df["cve_estado"].astype("string")
+df["cve_municipio"] = df["cve_municipio"].astype("string")
+df["cve_geostadistica"] = df["cve_geostadistica"].astype("string")
 
-#corregir error del codigo con clave 88 que detecta como vacio cuando es NA No aplica
-df.loc[
-    df["cve_estado"] == 88,
-    "cve_estado"
-] = "NA"
 
 print(df.info())
 print("-------Comienza la Carga-------")
+
 
 load_dotenv()
 usuario = os.getenv("MYSQL_USER")
@@ -59,7 +59,7 @@ try:
         if len(df) == 0 :
             raise ValueError("El DataFrame está vacío")
         
-        df.to_sql("cat_estado", 
+        df.to_sql("cat_municipio", 
                   conexion,
                   if_exists="append",
                   index=False)
@@ -67,7 +67,7 @@ try:
         #tiempo de finalizacion del proceso
         fin = time.time()
         print(f"Se ha completado el ETL: {len(df)} registros cargados en {round(fin-inicio,2)} segundos")
-        print(f"Tabla lista en MySQL en la base de datos: {database} y tabla cat_estados")
+        print(f"Tabla lista en MySQL en la base de datos: {database} y tabla cat_municipios")
 
         
 except Exception as e:
