@@ -11,7 +11,12 @@ inicio = time.time()
 df = pd.read_excel("cat_estado.xlsx",
                    sheet_name="ENTIDAD_FEDERATIVA",                   
                    #Columnas que se usaran 
-                   usecols=["CATALOG_KEY","ENTIDAD_FEDERATIVA","ABREVIATURA"]
+                   usecols=["CATALOG_KEY","ENTIDAD_FEDERATIVA","ABREVIATURA"],
+                   dtype={"CATALOG_KEY":"string", 
+                          "ENTIDAD_FEDERATIVA": "string", 
+                          "ABREVIATURA":"string"
+                          }
+                
 
 )
 
@@ -31,8 +36,6 @@ df = df.rename(columns={
 })
 
 
-# pasar columna a texto 
-df["cve_estado"] = df["cve_estado"].astype("string")
 
 #corregir error del codigo con clave 88 que detecta como vacio cuando es NA No aplica
 df.loc[
@@ -73,6 +76,3 @@ try:
 except Exception as e:
 
     print(f"Error en ETL: {e} se realizo rollback")
-   
-
-
