@@ -29,7 +29,7 @@ print(df.info())
 
 #Asignacion de columnas a tabla de MySQL
 df = df.rename(columns={
-    "codigo pais": "cve_pais",
+    "codigo pais": "cve_nacionalidad",
     "pais": "nombre_pais",
     "clave nacionalidad": "abreviatura"
 })
