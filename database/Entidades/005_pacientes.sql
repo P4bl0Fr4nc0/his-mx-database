@@ -40,12 +40,23 @@ ALTER TABLE pacientes ADD column correo_electronico VARCHAR(100) NULL;
 ALTER TABLE pacientes ADD column segundo_nombre VARCHAR(100) NULL;
 
 
+
 #agregar columna tipo de sangre y relacion tabla pacientes con cat_tipo de sangre
 
 ALTER TABLE pacientes ADD COLUMN cve_tipo_sangre TINYINT NOT NULL,
 ADD CONSTRAINT fk_paciente_cat_tipo_sangre
 FOREIGN KEY (cve_tipo_sangre)
 REFERENCES cat_tipo_sangre(cve_tipo_sangre);
+
+# se agrega columna del estatus administrativo en el que se encuentra el paciente, activo, inactivo, suspendido o dado de baja
+ALTER TABLE pacientes 
+ADD COLUMN cve_estatus_admin TINYINT NOT NULL DEFAULT 1;
+
+ALTER TABLE pacientes
+ADD CONSTRAINT fk_paciente_estatus_admin
+FOREIGN KEY (cve_estatus_admin)
+REFERENCES cat_estatus_administrativo(cve_estatus_admin);
+
 
 Describe pacientes;
 
