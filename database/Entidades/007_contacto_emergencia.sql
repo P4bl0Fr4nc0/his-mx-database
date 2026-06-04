@@ -1,7 +1,7 @@
 
 CREATE TABLE contacto_emergencia(
-cve_contacto_eme INT AUTO_INCREMENT PRIMARY KEY ,
-cve_paciente INT,
+id_contacto_eme INT AUTO_INCREMENT PRIMARY KEY ,
+id_paciente INT,
 cve_parentesco TINYINT, 
 nombre VARCHAR(100) NOT NULL,
 apellido_paterno VARCHAR(100) NOT NULL,
@@ -14,8 +14,8 @@ FOREIGN KEY (cve_parentesco)
 REFERENCES cat_parentesco(cve_parentesco),
 
 CONSTRAINT fk_contacto_eme_pacientes 
-FOREIGN KEY (cve_paciente)
-REFERENCES pacientes(cve_paciente)
+FOREIGN KEY (id_paciente)
+REFERENCES pacientes(id_paciente)
 );
 
 

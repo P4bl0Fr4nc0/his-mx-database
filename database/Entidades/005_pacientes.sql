@@ -2,7 +2,7 @@
 USE his_mx; 
 
 CREATE TABLE pacientes (
-cve_paciente  INT AUTO_INCREMENT PRIMARY KEY, 
+id_paciente  INT AUTO_INCREMENT PRIMARY KEY, 
 nombre VARCHAR(100) NOT NULL ,
 apellido_paterno VARCHAR(100) NOT NULL,
 apellido_materno VARCHAR(100) NOT NULL,
@@ -59,5 +59,6 @@ REFERENCES cat_estatus_administrativo(cve_estatus_admin);
 
 
 Describe pacientes;
+
 
 

@@ -3,8 +3,8 @@ USE his_mx;
 
 
 CREATE TABLE domicilio(
-cve_domicilio INT AUTO_INCREMENT PRIMARY KEY,
-cve_paciente INT NOT NULL,
+id_domicilio INT AUTO_INCREMENT PRIMARY KEY,
+id_paciente INT NOT NULL,
 calle VARCHAR(150) NOT NULL,
 num_ext VARCHAR(20) NOT NULL,
 num_int VARCHAR(20) NULL,
@@ -17,10 +17,10 @@ fecha_inicio_vigencia DATE NOT NULL,
 fecha_fin_vigencia DATE NULL,
 fecha_registro DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-
 CONSTRAINT fk_domicilio_paciente
-FOREIGN KEY (cve_paciente)
-REFERENCES pacientes(cve_paciente),
+FOREIGN KEY (id_paciente)
+REFERENCES pacientes(id_paciente),
+
 
 CONSTRAINT fk_domicilio_estado
 FOREIGN KEY (cve_estado)
@@ -35,5 +35,8 @@ FOREIGN KEY (cve_estado, cve_municipio, cve_localidad)
 REFERENCES cat_localidad(cve_estado, cve_municipio, cve_localidad)
 );
 
+
 DESCRIBE domicilio;
+
+DESCRIBE pacientes;
 
