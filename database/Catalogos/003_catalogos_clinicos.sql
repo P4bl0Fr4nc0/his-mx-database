@@ -1,4 +1,7 @@
 
+USE his_mx; 
+
+
 #Catalogo estatus vital del paciente 
 
 CREATE TABLE cat_estatus_paciente(
