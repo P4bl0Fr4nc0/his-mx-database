@@ -19,6 +19,21 @@ for i in range (150):
 
     sexo = random.choice([1,2])
 
+    if sexo == 1:  # Masculino
+        nombre = fake.first_name_male()
+        segundo_nombre = (
+        fake.first_name_male()
+        if random.random() < 0.85 #solo el 85 % de los medicos tendra segundo nombre  
+        else None
+    )
+    else:  # Femenino
+        nombre = fake.first_name_female()
+        segundo_nombre = (
+        fake.first_name_female()
+        if random.random() < 0.85 #solo el 85 % de los medicos tendra segundo nombre  
+        else None
+    )  
+
     if random.random() < 0.20: #Alrededor del 20% de los medicos seran medicos generales 
         cve_especialidad = 1 
     else:  cve_especialidad = random.randint(2,46)
@@ -30,8 +45,8 @@ for i in range (150):
         cedula_especialidad = str(9000000 + i)
 
     registros.append({
-        "nombre": fake.first_name(),
-        "segundo_nombre": fake.first_name() if random.random()<0.85 else None, #solo el 85 % de los medicos tendra segundo nombre  
+        "nombre": nombre,
+        "segundo_nombre": segundo_nombre, 
         "apellido_paterno": fake.last_name(),
         "apellido_materno": fake.last_name(),
         "fecha_nacimiento": fake.date_of_birth(
