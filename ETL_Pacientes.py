@@ -47,7 +47,7 @@ for i in range (1500):
 
         "curp": fake.bothify(text='????######??????##').upper(),
         "cve_sexo": sexo,
-        "cve_pais": "223",
+        "cve_nacionalidad": "223",
         "cve_estado": str(random.randint(1,32)).zfill(2),
         "cve_estatus": 1,
         "telefono_principal": fake.numerify("55########"),
