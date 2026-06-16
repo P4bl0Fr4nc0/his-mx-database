@@ -36,7 +36,3 @@ REFERENCES cat_localidad(cve_estado, cve_municipio, cve_localidad)
 );
 
 
-DESCRIBE domicilio;
-
-DESCRIBE pacientes;
-

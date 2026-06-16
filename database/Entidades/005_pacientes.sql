@@ -9,15 +9,15 @@ apellido_materno VARCHAR(100) NOT NULL,
 fecha_nacimiento DATE NOT NULL,
 curp CHAR (18) UNIQUE NOT NULL,
 cve_sexo TINYINT NOT NULL,
-cve_pais CHAR(3) NOT NULL, #pais de nacimiento
+cve_nacionalidad CHAR(3) NOT NULL, #pais de nacimiento
 cve_estado CHAR(2) NOT NULL, # estado de nacimieto
 cve_estatus TINYINT NOT NULL,
 fecha_registro DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-CONSTRAINT fk_paciente_pais
-FOREIGN KEY( cve_pais)
+CONSTRAINT fk_paciente_nacionalidad
+FOREIGN KEY( cve_nacionalidad)
 REFERENCES 
-cat_nacionalidad(cve_pais),
+cat_nacionalidad(cve_nacionalidad),
 
 CONSTRAINT fk_paciente_estado
 FOREIGN KEY ( cve_estado)
@@ -58,8 +58,6 @@ FOREIGN KEY (cve_estatus_admin)
 REFERENCES cat_estatus_administrativo(cve_estatus_admin);
 
 
-Describe pacientes;
-
 SELECT * FROM pacientes;
 
 Select p.nombre as nombre, p.apellido_paterno, p.apellido_materno, cs.descripcion as sexo , cts.descripcion as tipo_sangre, cte.nombre_estado as estado_nacimiento FROM pacientes p
@@ -71,3 +69,10 @@ cts.cve_tipo_sangre = p.cve_tipo_sangre
 INNER JOIN cat_estado cte
 ON 
 cte.cve_estado = p.cve_estado;
+
+Select p.nombre as nombre, cn.nombre_pais as nacionalidad FROM pacientes p
+INNER JOIN cat_nacionalidad cn
+ON cn.cve_nacionalidad = p.cve_nacionalidad
+
+
+

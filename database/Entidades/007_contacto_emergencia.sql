@@ -1,3 +1,4 @@
+USE his_mx; 
 
 CREATE TABLE contacto_emergencia(
 id_contacto_eme INT AUTO_INCREMENT PRIMARY KEY ,
@@ -17,5 +18,4 @@ CONSTRAINT fk_contacto_eme_pacientes
 FOREIGN KEY (id_paciente)
 REFERENCES pacientes(id_paciente)
 );
-
 
