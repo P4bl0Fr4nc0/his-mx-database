@@ -61,13 +61,16 @@ for i in range (150):
         "cedula_especialidad": cedula_especialidad,
          "telefono": fake.numerify("55########"),
         "correo_electronico": fake.unique.email(),
-        "cve_estatus_admin": 1
+        "cve_estatus_admin": 1,
+        "cve_nacionalidad": '233'
 
     })
 
 df = pd.DataFrame(registros)
 
 print(df.head())
+print(df.dtypes)
+
 
 print("-------Comienza la Carga-------")
 
