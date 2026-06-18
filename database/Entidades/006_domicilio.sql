@@ -13,7 +13,7 @@ cp CHAR(5) NOT NULL,
 cve_estado char(2) NOT NULL, #estado de residencia
 cve_municipio CHAR(3) NOT NULL, # municipio de residencia
 cve_localidad CHAR(4) NOT NULL, # localidad de residencia
-fecha_inicio_vigencia DATE NOT NULL,
+fecha_inicio_vigencia DATE NOT NULL DEFAULT (CURRENT_DATE),
 fecha_fin_vigencia DATE NULL,
 fecha_registro DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
@@ -34,5 +34,6 @@ CONSTRAINT fk_domicilio_localidad
 FOREIGN KEY (cve_estado, cve_municipio, cve_localidad)
 REFERENCES cat_localidad(cve_estado, cve_municipio, cve_localidad)
 );
+
 
 
