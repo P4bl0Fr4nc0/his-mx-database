@@ -26,6 +26,10 @@ CREATE TABLE citas (
     INDEX idx_citas_fecha (fecha_hora)
     
  );
+ 
+
+ 
+ 
 
 	
     
