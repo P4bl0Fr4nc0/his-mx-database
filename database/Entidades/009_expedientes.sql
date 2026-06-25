@@ -30,5 +30,5 @@ CREATE TABLE expedientes (
     CONSTRAINT fk_expediente_medico
 	FOREIGN KEY (id_medico)
 	REFERENCES medicos(id_medico)
+    
 );
-
