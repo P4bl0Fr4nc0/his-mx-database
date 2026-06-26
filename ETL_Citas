@@ -1,0 +1,120 @@
+#ETL para creacion de registros de citas
+import pandas as pd 
+import random
+from faker import Faker
+from sqlalchemy import create_engine
+import os
+from dotenv import load_dotenv
+import time
+
+inicio = time.time()
+
+#Definir el idioma en que quiero que me cree los datos
+fake = Faker("es_MX")
+
+#Variables para inico de sesion en la base de datos en el archivo .env 
+load_dotenv()
+usuario = os.getenv("MYSQL_USER")
+password = os.getenv("MYSQL_PASS")
+host = os.getenv("MYSQL_HOST")
+puerto = os.getenv("MYSQL_PORT")
+database = os.getenv("MYSQL_DB_NAME")
+
+#Conexion a la base de datos con su driver y carga de tabla
+engine = create_engine(f"mysql+pymysql://{usuario}:{password}@{host}:{puerto}/{database}")
+
+#seleccionar columnas de la tabla medicos
+df_medicos = pd.read_sql("""
+SELECT
+    id_medico, cve_especialidad
+FROM medicos 
+""", engine)
+
+#seleccionar columnas de la tabla consultorios
+df_consultorio = pd.read_sql("""                             
+SELECT 
+    id_consultorio
+FROM consultorios                           
+""",engine)
+
+#seleccionar columnas de la tabla expedientes haciendo joun con la tabla pacientes para obtener el sexo del paciente
+df_expediente = pd.read_sql("""
+SELECT
+    e.id_expediente,
+    p.cve_sexo
+FROM expedientes e
+JOIN pacientes p
+    ON e.id_paciente = p.id_paciente
+""", engine)
+
+
+
+ids_expedientes = df_expediente.sample(n=100)["id_expediente"].tolist() #escoge 50 id expedientes aleatorios
+
+# Como el id_consultorio que  representa la especialidad dentro de la tabla medicos, "donde se atiende dicha especialidad"
+df_consultorio = df_consultorio.rename(
+    columns={"id_consultorio": "cve_especialidad"}
+)
+
+# Une médicos con su consultorio correspondiente
+df = df_medicos.merge(df_consultorio, on="cve_especialidad")
+
+# Recuperar el id_consultorio cuando sea igual a la especialidad
+df["id_consultorio"] = df["cve_especialidad"]
+
+
+expedientes = df_expediente.sample(n=100, replace=True).reset_index(drop=True)
+
+registros = []
+
+#Se crean 50 citas aleatorias tomadas de muestra
+for _, paciente in expedientes.iterrows():
+      
+    sexo = paciente["cve_sexo"]
+
+    if sexo == 1:   # Hombre
+        candidatos = df[df["cve_especialidad"] != 5]   # Si el sexo es hombre no escoge el consultorio 5 = Ginecología
+    else:
+        candidatos = df
+
+    medico = candidatos.sample(1).iloc[0]
+  
+    registros.append({
+        "id_expediente": paciente["id_expediente"],
+        "id_medico":medico["id_medico"], #id de medicos que existen se deben cuidar los id dados de alta en base de datos
+        "id_consultorio": medico["id_consultorio"],
+        "fecha_hora": fake.date_time_between(
+         start_date="+1d",   # desde mañana
+         end_date="+30d"     # hasta dentro de 30 días
+        ), 
+        "cve_estatus_cita": random.randint(1, 5),
+        "motivo": fake.text(max_nb_chars= 30),    
+      
+    })       
+    
+df = pd.DataFrame(registros)    
+
+print(df.head(10))
+
+
+print("-------Comienza la Carga-------")
+
+#Try catch para hacer rollback en caso de error
+try:
+    with engine.begin() as conexion:
+        if len(df) == 0 :
+            raise ValueError("El DataFrame está vacío")
+        
+        df.to_sql("citas", 
+                  conexion,
+                  if_exists="append",
+                  index=False)
+
+        #tiempo de finalizacion del proceso
+        fin = time.time()
+        print(f"Se ha completado el ETL: {len(df)} registros cargados en {round(fin-inicio,2)} segundos")
+        print(f"Tabla lista en MySQL en la base de datos: {database} y tabla citas")
+        
+except Exception as e:
+    print(f"Error en ETL: {e} se realizo rollback")
+
