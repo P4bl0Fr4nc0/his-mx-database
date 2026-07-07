@@ -49,7 +49,7 @@ JOIN pacientes p
 
 
 
-ids_expedientes = df_expediente.sample(n=100)["id_expediente"].tolist() #escoge 50 id expedientes aleatorios
+ids_expedientes = df_expediente.sample(n=100)["id_expediente"].tolist() #escoge 100 id expedientes aleatorios
 
 # Como el id_consultorio que  representa la especialidad dentro de la tabla medicos, "donde se atiende dicha especialidad"
 df_consultorio = df_consultorio.rename(
