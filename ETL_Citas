@@ -67,7 +67,7 @@ expedientes = df_expediente.sample(n=100, replace=True).reset_index(drop=True)
 
 registros = []
 
-#Se crean 50 citas aleatorias tomadas de muestra
+#Se crean 100 citas aleatorias tomadas de muestra
 for _, paciente in expedientes.iterrows():
       
     sexo = paciente["cve_sexo"]
@@ -117,4 +117,3 @@ try:
         
 except Exception as e:
     print(f"Error en ETL: {e} se realizo rollback")
-
