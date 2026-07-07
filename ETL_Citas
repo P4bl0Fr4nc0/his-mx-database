@@ -87,7 +87,7 @@ for _, paciente in expedientes.iterrows():
          start_date="+1d",   # desde mañana
          end_date="+30d"     # hasta dentro de 30 días
         ), 
-        "cve_estatus_cita": random.randint(1, 5),
+        "cve_estatus_cita": random.randint(1, 2), # que solo hata citas programadas o confirmadas
         "motivo": fake.text(max_nb_chars= 30),    
       
     })       
