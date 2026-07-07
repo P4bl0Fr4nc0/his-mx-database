@@ -1,4 +1,4 @@
-#ETL para creacion de registros de citas
+#ETL para creacion de registros de consultas
 import pandas as pd 
 import random
 from faker import Faker
