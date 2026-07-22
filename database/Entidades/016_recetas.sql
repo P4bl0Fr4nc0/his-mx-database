@@ -4,7 +4,7 @@ USE his_mx;
 CREATE TABLE recetas (
 id_receta INT PRIMARY KEY AUTO_INCREMENT,
 id_consulta INT NOT NULL,
-id_medico INT NOT NULL,
+id_medico INT NOT NULL, -- medico que prescribe la receta
 fecha_emision DATE NOT NULL,
 indicaciones_generales TEXT NOT NULL,
 fecha_registro DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
