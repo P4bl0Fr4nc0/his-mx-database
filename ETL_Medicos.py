@@ -62,7 +62,7 @@ for i in range (150):
          "telefono": fake.numerify("55########"),
         "correo_electronico": fake.unique.email(),
         "cve_estatus_admin": 1,
-        "cve_nacionalidad": '233'
+        "cve_nacionalidad": '223'
 
     })
 
