@@ -56,17 +56,4 @@ ADD CONSTRAINT fk_paciente_estatus_admin
 FOREIGN KEY (cve_estatus_admin)
 REFERENCES cat_estatus_administrativo(cve_estatus_admin);
 
-Select p.nombre as nombre, p.apellido_paterno, p.apellido_materno, cs.descripcion as sexo , cts.descripcion as tipo_sangre, cte.nombre_estado as estado_nacimiento FROM pacientes p
-INNER	JOIN cat_sexo cs
-ON cs.cve_sexo = p.cve_sexo
-INNER JOIN cat_tipo_sangre cts
-ON
-cts.cve_tipo_sangre = p.cve_tipo_sangre
-INNER JOIN cat_estado cte
-ON 
-cte.cve_estado = p.cve_estado;
-
-Select p.nombre as nombre, cn.nombre_pais as nacionalidad FROM pacientes p
-INNER JOIN cat_nacionalidad cn
-ON cn.cve_nacionalidad = p.cve_nacionalidad
 

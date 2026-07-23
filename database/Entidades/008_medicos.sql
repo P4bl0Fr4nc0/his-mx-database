@@ -42,23 +42,9 @@ SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE medicos;
 SET FOREIGN_KEY_CHECKS = 1;
 */
-SELECT * FROM medicos;
-
-#Consulta para checar los medicos y la especialidad que se le asigno con faker
-
-SELECT m.id_medico, m.nombre, m.segundo_nombre, m.cve_especialidad, ce.descripcion FROM medicos m
-INNER JOIN cat_especialidad ce
-ON  ce.cve_especialidad = m.cve_especialidad;
 
 
-Select * from medicos;
 
-# Consulta para ver nombre, apelludo, nacionalidad y especialidad del médico
-SELECT m.nombre, m.apellido_paterno as apellido, cn.nombre_pais  as nacionalidad, ce.descripcion as especialidad FROM medicos m
-INNER JOIN cat_nacionalidad cn
-ON m.cve_nacionalidad = cn.cve_nacionalidad
-INNER JOIN cat_especialidad ce 
-ON m.cve_especialidad = ce.cve_especialidad;
     
 
 
