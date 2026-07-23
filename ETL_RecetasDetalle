@@ -1,0 +1,105 @@
+#ETL para cargar registros a la tabla recetas detalle
+import pandas as pd 
+import random
+from faker import Faker
+from sqlalchemy import create_engine
+import os
+from dotenv import load_dotenv
+import time
+
+inicio = time.time()
+
+#Definir el idioma en que quiero que me cree los datos
+fake = Faker("es_MX")
+
+#Variables para inico de sesion en la base de datos en el archivo .env 
+load_dotenv()
+usuario = os.getenv("MYSQL_USER")
+password = os.getenv("MYSQL_PASS")
+host = os.getenv("MYSQL_HOST")
+puerto = os.getenv("MYSQL_PORT")
+database = os.getenv("MYSQL_DB_NAME")
+
+#Conexion a la base de datos con su driver y carga de tabla
+engine = create_engine(f"mysql+pymysql://{usuario}:{password}@{host}:{puerto}/{database}")
+
+#seleccionar id de recetas de la tabla recetas
+df_recetas= pd.read_sql("""
+SELECT
+    id_receta 
+ FROM recetas 
+""", engine)
+
+#seleccionar id medico para recetas donde el medico que dio la consulta no sea el mismo que emite receta
+df_medicamentos = pd.read_sql("""
+SELECT
+    id_medicamento, presentacion
+FROM cat_medicamentos
+""", engine)
+
+df_recetas = df_recetas.reset_index(drop=True)
+
+registros = []
+
+plural = {
+    "Tableta": "Tabletas",
+    "Ampolleta": "Ampolletas",
+    "Cápsula": "Cápsulas",
+    "Suspensión": "Suspensiones",
+    "Inyectable": "Aplicaciones",
+    "Jeringa": "Jeringas",
+    "Pluma": "Plumas",
+    "Frasco": "Frascos",
+    "Inhalador": "Inhaladores",
+}
+
+#Se crean 100 consultas aleatorias tomadas de muestra
+for _, receta in df_recetas.iterrows():
+
+    cantidad_dosis = random.randint(1,2)  #dosis aleatoria entre 1 y 2 
+    cantidad_dias = random.randint(3,7)   # dias aleatorios entre 3 y 7  
+    cantidad_horas =  random.choice([12, 18, 24])
+    medicamento = df_medicamentos.sample(1).iloc[0]
+    presentacion = medicamento["presentacion"]
+    id_medicamento = medicamento["id_medicamento"]
+    if cantidad_dosis > 1:
+        presentacion = plural.get(presentacion, presentacion)
+
+    dosis = f"{cantidad_dosis} {presentacion}"
+ 
+    registros.append({
+        "id_receta": receta["id_receta"],
+        "id_medicamento": id_medicamento,
+        "dosis": dosis,        
+        "frecuencia": f"Cada {cantidad_horas} horas",
+        "duracion": f"{cantidad_dias} días",
+        "cantidad": cantidad_dosis,
+        "indicaciones": fake.text(max_nb_chars= 50), #texto aleatorio solo para pruebas             
+    })       
+    
+df = pd.DataFrame(registros)    
+
+print(df.head(10))
+
+print("-------Comienza la Carga-------")
+
+#Try catch para hacer rollback en caso de error
+
+try:
+    with engine.begin() as conexion:
+        if len(df) == 0 :
+            raise ValueError("El DataFrame está vacío")
+        
+        df.to_sql("detalle_recetsa", 
+                  conexion,
+                  if_exists="append",
+                  index=False)
+
+        #tiempo de finalizacion del proceso
+        fin = time.time()
+        print(f"Se ha completado el ETL: {len(df)} registros cargados en {round(fin-inicio,2)} segundos")
+        print(f"Tabla lista en MySQL en la base de datos: {database} y tabla detalle_receta")
+        
+except Exception as e:
+    print(f"Error en ETL: {e} se realizo rollback")
+
