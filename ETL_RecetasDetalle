@@ -90,7 +90,7 @@ try:
         if len(df) == 0 :
             raise ValueError("El DataFrame está vacío")
         
-        df.to_sql("detalle_recetsa", 
+        df.to_sql("receta_detalle", 
                   conexion,
                   if_exists="append",
                   index=False)
@@ -98,7 +98,7 @@ try:
         #tiempo de finalizacion del proceso
         fin = time.time()
         print(f"Se ha completado el ETL: {len(df)} registros cargados en {round(fin-inicio,2)} segundos")
-        print(f"Tabla lista en MySQL en la base de datos: {database} y tabla detalle_receta")
+        print(f"Tabla lista en MySQL en la base de datos: {database} y tabla receta_detalle")
         
 except Exception as e:
     print(f"Error en ETL: {e} se realizo rollback")
